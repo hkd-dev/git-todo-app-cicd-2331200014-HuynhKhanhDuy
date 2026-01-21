@@ -12,22 +12,32 @@ test('End-to-end user workflow', async () => {
     // 2. Type the `taskText` into it.
     // 3. Find and click the "Add" button.
 
+    await window.locator('#todo-input').fill(taskText);
+    await window.locator('#add-todo-btn').click();
+
 
     // --- TODO: Task 2: Verify the todo item was added ---
     // 1. Locate the new todo item in the list. A good locator might be `window.locator('.todo-item')`.
     // 2. Assert that its text content contains the `taskText`.
+
+    const firstTodo = window.locator('#todo-list li').first();
+    await expect(firstTodo).toContainText(taskText);
     
 
     // --- TODO: Task 3: Mark the todo item as complete ---
     // 1. Find the checkbox within the new todo item.
     // 2. Click the checkbox.
     // 3. Assert that the todo item now has the 'completed' class.
+    await firstTodo.locator('input[type="checkbox"]').click();
+    await expect(firstTodo).toHaveClass(/completed/);
 
 
     // --- TODO: Task 4: Delete the todo item ---
     // 1. Find the delete button within the todo item.
     // 2. Click the delete button.
     // 3. Assert that the todo item is no longer visible on the page.
+    await firstTodo.locator('button').click();
+    await expect(window.locator('#todo-list li')).toHaveCount(0);
 
 
     // Close the app
